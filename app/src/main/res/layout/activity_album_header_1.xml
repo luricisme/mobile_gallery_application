@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/btnCurrent"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="10dp"
+        android:text="Album"
+        android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/btnSearch"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:background="@null"
+        app:srcCompat="@drawable/search" />
+
+    <ImageButton
+        android:id="@+id/btnFunction"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:background="@null"
+        app:srcCompat="@drawable/function" />
+
+</LinearLayout>

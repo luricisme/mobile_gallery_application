@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +24,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     private int typeLayout = 1;
+    private int scrollPos = 0;
     ImageButton btnLayout;
     ImageButton btnHome;
     ImageButton btnAlbum;
@@ -31,11 +33,42 @@ public class HomeActivity extends AppCompatActivity {
     LayoutInflater inflater;
     View childLayoutHeader1, childLayoutHeader2;
 
+    ImageButton btnFavorImg, btnEditImg, btnDeleteImg, btnShareImg, btnBackImg, btnFunctionImg;
+    ImageView imgSoloPhoto;
+
+    List<Integer> imageResIds = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home); // Layout chứa RecyclerView
+        createHome();
+    }
 
+    private void showSoloPhoto(int position){
+        // Đổi sang layout hình chi tiết
+        setContentView(R.layout.activity_solo_picture);
+
+        btnFavorImg = findViewById(R.id.btnFavorImg);
+        btnEditImg = findViewById(R.id.btnEditImg);
+        btnDeleteImg = findViewById(R.id.btnDeleteImg);
+        btnShareImg = findViewById(R.id.btnShareImg);
+        btnBackImg = findViewById(R.id.btnBackImg);
+        btnFunctionImg = findViewById(R.id.btnFunctionImg);
+        imgSoloPhoto = findViewById(R.id.imgSoloPhoto);
+
+        imgSoloPhoto.setImageResource(imageResIds.get(position));
+
+        btnBackImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setContentView(R.layout.activity_home);
+                createHome();
+            }
+        });
+    }
+
+    private void createHome(){
         btnHome = findViewById(R.id.btnHome);
         btnAlbum = findViewById(R.id.btnAlbum);
 
@@ -51,32 +84,47 @@ public class HomeActivity extends AppCompatActivity {
 
         btnLayout = childLayoutHeader2.findViewById(R.id.btnLayout);
 
+        imageResIds.clear();
+        imageResIds.add(R.drawable.test);
+        imageResIds.add(R.drawable.test1);
+        imageResIds.add(R.drawable.test2);
+        imageResIds.add(R.drawable.test3);
+        imageResIds.add(R.drawable.test4);
+        imageResIds.add(R.drawable.test5);
+        imageResIds.add(R.drawable.test6);
+        imageResIds.add(R.drawable.test7);
+        imageResIds.add(R.drawable.test8);
+        imageResIds.add(R.drawable.test9);
+        imageResIds.add(R.drawable.test10);
+        imageResIds.add(R.drawable.test11);
+
         recyclerView = findViewById(R.id.layoutViewImage);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<Integer> imageResIds = new ArrayList<>();
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-        imageResIds.add(R.drawable.test);
-
-        MyAdapterLayout adapter = new MyAdapterLayout(imageResIds, this, 1);
+        MyAdapterLayout adapter = new MyAdapterLayout(imageResIds, this, typeLayout, new MyAdapterLayout.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, int index) {
+                scrollPos = position;
+                showSoloPhoto(position*typeLayout+index);
+            }
+        });
         recyclerView.setAdapter(adapter);
+
+        recyclerView.scrollToPosition(scrollPos);
+        switch (typeLayout) {
+            case 1:
+                btnLayout.setImageResource(R.drawable.imglayout_1);
+                break;
+            case 2:
+                btnLayout.setImageResource(R.drawable.imglayout_2);
+                break;
+            case 3:
+                btnLayout.setImageResource(R.drawable.imglayout_3);
+                break;
+            default:
+                btnLayout.setImageResource(R.drawable.imglayout_1); // Hình ảnh mặc định nếu không có trường hợp nào khớp
+                break;
+        }
 
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +177,7 @@ public class HomeActivity extends AppCompatActivity {
                     default:
                         btnLayout.setImageResource(R.drawable.imglayout_1); // Hình ảnh mặc định nếu không có trường hợp nào khớp
                         break;
-                        }
+                }
                 recyclerView.scrollToPosition(0);
                 adapter.setLayoutType(typeLayout); // Cập nhật adapter
             }

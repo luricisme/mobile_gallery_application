@@ -15,11 +15,13 @@ public class MyAdapterLayout extends RecyclerView.Adapter<MyAdapterLayout.MyView
     private List<Integer> imageResIds; // Danh sách ID tài nguyên ảnh
     private Context context;
     private int typeLayout; // Trạng thái hiện tại của layout
+    private OnItemClickListener listener;
 
-    public MyAdapterLayout(List<Integer> imageResIds, Context context, int _typeLayout) {
+    public MyAdapterLayout(List<Integer> imageResIds, Context context, int _typeLayout, OnItemClickListener listener) {
         this.imageResIds = imageResIds;
         this.context = context;
         this.typeLayout = _typeLayout; // Khởi tạo trạng thái
+        this.listener = listener;
     }
 
     @NonNull
@@ -35,7 +37,7 @@ public class MyAdapterLayout extends RecyclerView.Adapter<MyAdapterLayout.MyView
         else if (viewType == 3) {
             view = LayoutInflater.from(context).inflate(R.layout.activity_home_layout_3, parent, false);
         }
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, listener);
     }
 
     @Override
@@ -92,7 +94,7 @@ public class MyAdapterLayout extends RecyclerView.Adapter<MyAdapterLayout.MyView
         ImageView imageView2;
         ImageView imageView3;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             imageView1 = itemView.findViewById(R.id.imageView1);
             imageView2 = itemView.findViewById(R.id.imageView2);
@@ -108,7 +110,39 @@ public class MyAdapterLayout extends RecyclerView.Adapter<MyAdapterLayout.MyView
             } else if (imageView3 == null) {
                 imageView3 = null; // Không sử dụng imageView3 trong layout
             }
+
+            imageView1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onItemClick(getAdapterPosition(), 0);
+                    }
+                }
+            });
+            if (imageView2 != null) {
+                imageView2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null) {
+                            listener.onItemClick(getAdapterPosition(), 1);
+                        }
+                    }
+                });
+            }
+            if (imageView3 != null) {
+                imageView3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null) {
+                            listener.onItemClick(getAdapterPosition(), 2);
+                        }
+                    }
+                });
+            }
         }
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(int position, int index);
+    }
 }
